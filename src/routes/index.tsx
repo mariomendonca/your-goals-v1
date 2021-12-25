@@ -1,8 +1,8 @@
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { NavigationContainer } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
 
-import { Home } from "../pages/Home";
-import { Login } from "../pages/Login";
+import { Home } from '../pages/Home'
+import { Login } from '../pages/Login'
 
 export function Routes() {
   const { Navigator, Screen } = createStackNavigator()

@@ -1,13 +1,12 @@
-import { useNavigation } from '@react-navigation/native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Container, Title } from './styles';
+import { useNavigation } from '@react-navigation/native'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import { Container, Title } from './styles'
 
 export function Home() {
   const { goBack } = useNavigation()
 
   function backToLogin() {
     goBack()
-    return
   }
   return (
     <Container>
@@ -15,5 +14,5 @@ export function Home() {
         <Title>Home</Title>
       </TouchableOpacity>
     </Container>
-  );
+  )
 }

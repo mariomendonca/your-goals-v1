@@ -1,6 +1,6 @@
 import styled from 'styled-components/native'
-import { colors } from '../../styles/Colors';
-import { fonts } from '../../styles/Fonts';
+import { colors } from '../../styles/Colors'
+import { fonts } from '../../styles/Fonts'
 
 export const Container = styled.View`
   flex: 1;
@@ -8,7 +8,7 @@ export const Container = styled.View`
   justify-content: center;
   align-items: center;
   padding: 0 20px;
-`;
+`
 
 export const Title = styled.Text`
   font-size: 35px;

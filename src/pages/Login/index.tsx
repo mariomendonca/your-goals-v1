@@ -1,6 +1,6 @@
-import { useNavigation } from '@react-navigation/native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Container, Title } from './styles';
+import { useNavigation } from '@react-navigation/native'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import { Container, Title } from './styles'
 
 export function Login() {
   const { navigate } = useNavigation()
@@ -15,5 +15,5 @@ export function Login() {
         <Title>Your goals</Title>
       </TouchableOpacity>
     </Container>
-  );
+  )
 }
