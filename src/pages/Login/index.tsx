@@ -1,10 +1,13 @@
 import { useNavigation } from '@react-navigation/native'
 import * as AuthSession from 'expo-auth-session'
-import { Container, Title } from './styles'
+import { Container, Content, Title, Subtitle } from './styles'
 import { CLIENT_ID, REDIRECT_URI, RESPONSE_TYPE } from '../../config/variables'
 import { Alert } from 'react-native'
 import { useState } from 'react'
 import { Button } from '../../components/Button'
+
+import GoalsSVG from '../../assets/goals.svg'
+import axios from 'axios'
 
 type AuthResponse = {
   type: string
@@ -33,11 +36,11 @@ export function Login() {
     try {
       setLoading(true)
       const { type, params } = await AuthSession.startAsync({ authUrl }) as AuthResponse
-      if (type === 'success') {
-        const response = await fetch(`https://www.googleapis.com/oauth2/v2/userinfo?alt=json&access_token=${params.access_token}`)
-        const user = await response.json()
 
-        navigate('Home', { user })
+      if (type === 'success') {
+        const response = await axios.get(`https://www.googleapis.com/oauth2/v2/userinfo?alt=json&access_token=${params.access_token}`)
+        
+        navigate('Home')
       }
       setLoading(false)
     } catch {
@@ -47,8 +50,12 @@ export function Login() {
 
   return (
     <Container>
-      <Title>Your goals</Title>
-      <Button text='Entrar' loading={loading} onPress={handleLogin} />
+      <GoalsSVG width={300} height={200}/>
+      <Content>
+        <Title>Your goals</Title>
+        <Subtitle>Set goals and achieve your dreams!</Subtitle>
+        <Button text='Login' loading={loading} onPress={handleLogin} />
+      </Content>
     </Container>
   )
 }
