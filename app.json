@@ -2,6 +2,7 @@
   "expo": {
     "name": "your-goals",
     "slug": "your-goals",
+    "scheme": "your-goals",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
