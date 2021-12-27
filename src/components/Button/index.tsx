@@ -4,7 +4,7 @@ import { ButtonContainer, Text } from './styles'
 
 type Props = RectButtonProps & {
   text: string
-  loading: boolean
+  loading?: boolean
 }
 
 export function Button({ text, loading, ...rest }: Props) {
