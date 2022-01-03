@@ -10,13 +10,12 @@ type User = {
   id: string;
   email: string;
   name: string;
-  createdAt: Date
+  // createdAt: Date
 }
 
 type AuthContextData = {
   user: User;
   setUser: any;
-  loading: boolean;
   handleLogin: () => Promise<void>
 }
 
@@ -35,32 +34,35 @@ const AuthContext = createContext({} as AuthContextData)
 
 function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>({} as User)
-  const [loading, setLoading] = useState(false)
-  
+
   async function handleLogin() {
-    try {
-      setLoading(true)
-      const { type, params } = await AuthSession.startAsync({ authUrl }) as AuthResponse
+    const { type, params } = await AuthSession.startAsync({ authUrl }) as AuthResponse
+
+    if (type === 'success') {
+      const { data } = await axios.get(`https://www.googleapis.com/oauth2/v2/userinfo?alt=json&access_token=${params.access_token}`)
+      console.log(data)
       
-      if (type === 'success') {
-        const { data } = await axios.get(`https://www.googleapis.com/oauth2/v2/userinfo?alt=json&access_token=${params.access_token}`)
+      const existentUser = await getUserByEmail(data.email)
+      console.log('TESTE', existentUser)
+      
+      // if (!existentUser) {
+      //   console.log('entrou')
         
-        // const response = await createUser(data.email, data.name)
-        const response = await getUserByEmail(data.email)
+      //   const response = await createUser(data.email, data.name)
+        
+      // }
+      // setUser(existentUser)
 
-        
-        
 
-        // navigate('Home')
-      }
-      setLoading(false)
-    } catch {
-      Alert.alert('Algo inesperado aconteceu')
+      // const response = await getUserByEmail(data.email)
+
+
+
     }
   }
 
   return (
-    <AuthContext.Provider value={{ user, setUser, loading, handleLogin }}>
+    <AuthContext.Provider value={{ user, setUser, handleLogin }}>
       {children}
     </AuthContext.Provider>
   )

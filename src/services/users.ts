@@ -1,14 +1,8 @@
-import { addDoc, collection, getDocs, query, where } from 'firebase/firestore'
 import { db } from '../config/firebase'
-
-// type ICreateUser = {
-//   name: string;
-//   email: string;
-// }
+import { addDoc, collection, getDocs, query, where } from 'firebase/firestore'
 
 const usersCollectionRef = collection(db, 'Users')
 
-// async function createUser({email, name}: ICreateUser) {
 async function createUser(email: string, name: string) {
   const user = {
     email,
@@ -21,14 +15,28 @@ async function createUser(email: string, name: string) {
   return response
 }
 
+async function getUserById(id: string) {
+  return id
+}
+
 async function getUserByEmail(email: string) {
   const q = query(usersCollectionRef, where('email', '==', email))
-  const user = await getDocs(q)
-  // user[0] 
-  console.log(user)
+  const userDoc = await getDocs(q)
   
-  // user.forEach((doc) => {const test = (doc.data(), doc.id)})
+  console.log('entrou')
   
+  const data = userDoc.docs[0].data()
+  console.log(data)
+  
+  // const name = data.name
+  // const userEmail = data.email
+  // const id = userDoc.docs[0].id
+  // const user = {...data, id}  
+  // const user = { name, email: userEmail, id}  
+  // return user
+  return null
+
+
 
 }
 
@@ -37,5 +45,6 @@ async function getUserByEmail(email: string) {
 // }
 export {
   createUser,
-  getUserByEmail
+  getUserByEmail,
+  getUserById
 }
