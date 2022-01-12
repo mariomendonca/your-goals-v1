@@ -1,22 +1,22 @@
-import { createContext, ReactNode, useContext, useState } from 'react'
+import { createContext, ReactNode, useContext, useEffect, useState } from 'react'
+import axios from 'axios'
 import * as AuthSession from 'expo-auth-session'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { authUrl } from '../config/variables'
-import { Alert } from 'react-native'
-import axios from 'axios'
-import { createUser, getUserByEmail } from '../services/users'
+import { createUser, signIn } from '../services/users'
+import AppLoading from 'expo-app-loading'
 
 type User = {
   id: string;
   email: string;
   name: string;
-  // createdAt: Date
 }
 
 type AuthContextData = {
   user: User;
   setUser: any;
-  handleLogin: () => Promise<void>
+  handleLogin: () => Promise<any>
 }
 
 type AuthProviderProps = {
@@ -33,36 +33,45 @@ type AuthResponse = {
 const AuthContext = createContext({} as AuthContextData)
 
 function AuthProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = useState<User>({} as User)
+  // const [user, setUser] = useState<User>({} as User)
+  const [user, setUser] = useState<any>()
+  const [loading, setLoading] = useState(false)
 
   async function handleLogin() {
     const { type, params } = await AuthSession.startAsync({ authUrl }) as AuthResponse
 
     if (type === 'success') {
       const { data } = await axios.get(`https://www.googleapis.com/oauth2/v2/userinfo?alt=json&access_token=${params.access_token}`)
-      console.log(data)
-      
-      const existentUser = await getUserByEmail(data.email)
-      console.log('TESTE', existentUser)
-      
-      // if (!existentUser) {
-      //   console.log('entrou')
-        
-      //   const response = await createUser(data.email, data.name)
-        
-      // }
-      // setUser(existentUser)
 
-
-      // const response = await getUserByEmail(data.email)
-
-
-
+      try {
+        const user = signIn(data.id, data.email, setUser)
+        return user
+      } catch {
+        const user = createUser(data.id, data.email, setUser)
+        return user
+      }
     }
   }
 
+  useEffect(() => {
+    async function loadUser() {
+      setLoading(true)
+      const userLoaded = await AsyncStorage.getItem('@yg/user')
+      if (userLoaded) {
+        setUser(JSON.parse(userLoaded))
+      }
+      setLoading(false)
+    }
+    loadUser()
+  }, [])
+
+  // if (loading) {
+  //   return <AppLoading />
+  // }
+
   return (
     <AuthContext.Provider value={{ user, setUser, handleLogin }}>
+      {console.log('user', user)}
       {children}
     </AuthContext.Provider>
   )

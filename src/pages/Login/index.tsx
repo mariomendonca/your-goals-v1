@@ -23,11 +23,12 @@ export function Login() {
   const [loading, setLoading] = useState(false)
 
   async function handleSignIn() {
+    setLoading(true)
     try {
-      setLoading(true)
-      await handleLogin()
-      
-      // navigate('Home')
+      const response = await handleLogin()
+      if (response) {
+        navigate('Home')
+      }
     } catch {
       Alert.alert('Algo inesperado aconteceu')
     } finally {
@@ -37,9 +38,9 @@ export function Login() {
 
   return (
     <Container>
-      <GoalsSVG width={300} height={200}/>
+      <GoalsSVG width={300} height={200} />
       <Content>
-        <Title>Your goals</Title>
+        <Title>Your Goals</Title>
         <Subtitle>Set goals and achieve your dreams!</Subtitle>
         <Button text='Login' loading={loading} onPress={handleSignIn} />
       </Content>
