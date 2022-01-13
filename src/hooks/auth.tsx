@@ -5,7 +5,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { authUrl } from '../config/variables'
 import { createUser, signIn } from '../services/users'
-import AppLoading from 'expo-app-loading'
 
 type User = {
   id: string;
@@ -65,13 +64,8 @@ function AuthProvider({ children }: AuthProviderProps) {
     loadUser()
   }, [])
 
-  // if (loading) {
-  //   return <AppLoading />
-  // }
-
   return (
     <AuthContext.Provider value={{ user, setUser, handleLogin }}>
-      {console.log('user', user)}
       {children}
     </AuthContext.Provider>
   )

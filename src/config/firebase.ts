@@ -1,15 +1,25 @@
 import { initializeApp } from 'firebase/app'
 import { getFirestore } from 'firebase/firestore'
+import {
+  API_KEY,
+  APP_ID,
+  AUTH_DOMAIN,
+  DATABASE_URL,
+  MEASUREMENT_ID,
+  MESSAGING_SENDER_ID,
+  PROJECT_ID,
+  STORAGE_BUCKET
+} from './variables'
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyA2c-FsWMoBLKuwKxXRDVckGN2925HyW6s',
-  authDomain: 'your-goals-7e77c.firebaseapp.com',
-  databaseURL: 'https://your-goals-7e77c-default-rtdb.firebaseio.com',
-  projectId: 'your-goals-7e77c',
-  storageBucket: 'your-goals-7e77c.appspot.com',
-  messagingSenderId: '1026097918573',
-  appId: '1:1026097918573:web:33e7a9e98447f583a84564',
-  measurementId: 'G-ZD6GV7RK83'
+  apiKey: API_KEY,
+  authDomain: AUTH_DOMAIN,
+  databaseURL: DATABASE_URL,
+  projectId: PROJECT_ID,
+  storageBucket: STORAGE_BUCKET,
+  messagingSenderId: MESSAGING_SENDER_ID,
+  appId: APP_ID,
+  measurementId: MEASUREMENT_ID
 }
 
 const app = initializeApp(firebaseConfig)
