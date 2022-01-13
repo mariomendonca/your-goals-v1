@@ -15,7 +15,8 @@ type User = {
 type AuthContextData = {
   user: User;
   setUser: any;
-  handleLogin: () => Promise<any>
+  handleLogin: () => Promise<any>,
+  loading: boolean
 }
 
 type AuthProviderProps = {
@@ -41,12 +42,14 @@ function AuthProvider({ children }: AuthProviderProps) {
 
     if (type === 'success') {
       const { data } = await axios.get(`https://www.googleapis.com/oauth2/v2/userinfo?alt=json&access_token=${params.access_token}`)
-
+    
       try {
-        const user = signIn(data.id, data.email, setUser)
+        const user = await signIn(data.id, data.email, setUser)
+        
         return user
       } catch {
-        const user = createUser(data.id, data.email, setUser)
+        const user = await createUser(data.id, data.email, setUser)
+        
         return user
       }
     }
@@ -65,7 +68,7 @@ function AuthProvider({ children }: AuthProviderProps) {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ user, setUser, handleLogin }}>
+    <AuthContext.Provider value={{ user, setUser, handleLogin, loading }}>
       {children}
     </AuthContext.Provider>
   )

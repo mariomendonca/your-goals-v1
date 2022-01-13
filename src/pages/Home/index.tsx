@@ -17,6 +17,7 @@ export function Home() {
 
   async function backToLogin() {
     await signOut(setUser)
+    goBack()
   }
 
 
