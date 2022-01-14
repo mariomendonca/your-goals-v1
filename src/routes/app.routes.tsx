@@ -8,7 +8,7 @@ export function AppRoutes() {
     <Navigator screenOptions={{
       headerShown: false
     }}>
-      <Screen name='Login' component={Login} />
+      {/* <Screen name='Login' component={Login} /> */}
       <Screen name='Home' component={Home} />
     </Navigator>
   )

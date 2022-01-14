@@ -1,6 +1,6 @@
 import { db } from '../config/firebase'
 import { doc, getDoc, setDoc, Timestamp } from 'firebase/firestore'
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth'
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Alert } from 'react-native'
 
@@ -17,11 +17,10 @@ async function createUser(id: string, email: string, setUser: any) {
     }
     await setDoc(doc(db, 'Users', response.user.uid), newDoc)
 
-    const user = { ...newDoc, id: response.user.uid}
-    setUser(user)
-    await AsyncStorage.setItem('@yg/user', JSON.stringify(user))
+    setUser(newDoc)
+    await AsyncStorage.setItem('@yg/user', JSON.stringify(newDoc))
 
-    return user
+    return newDoc
   } catch {
     Alert.alert('Algo inesperado aconteceu')
   }
@@ -41,7 +40,9 @@ async function signIn(id: string, email: string, setUser: any) {
   return user
 }
 
-async function signOut(setUser: any) {
+async function signOutUser(setUser: any, setUid: any) {
+  setUid('')
+  await signOut(auth)
   await AsyncStorage.removeItem('@yg/user')
   setUser({})
 }
@@ -49,5 +50,5 @@ async function signOut(setUser: any) {
 export {
   createUser,
   signIn,
-  signOut,
+  signOutUser,
 }

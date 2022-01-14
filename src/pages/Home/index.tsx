@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native'
-import { useEffect, useState } from 'react'
+// import { useEffect, useState } from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
 // import { db } from '../../config/firebase'
@@ -9,21 +9,21 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { Container, Title } from './styles'
 import { useAuth } from '../../hooks/auth'
 import { Text } from 'react-native'
-import { signOut } from '../../services/users'
+import { signOutUser } from '../../services/users'
 
 export function Home() {
   const { goBack } = useNavigation()
-  const { user, setUser } = useAuth()
+  const { user, setUser, setUid } = useAuth()
 
-  async function backToLogin() {
-    await signOut(setUser)
-    goBack()
+  async function handleSignOut() {
+    await signOutUser(setUser, setUid)
+    // goBack()
   }
 
 
   return (
     <Container>
-      <TouchableOpacity onPress={backToLogin}>
+      <TouchableOpacity onPress={handleSignOut}>
         <Title>Home</Title>
       </TouchableOpacity>
 
