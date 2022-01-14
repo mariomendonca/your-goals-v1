@@ -4,6 +4,8 @@ import { Button } from '../../components/Button'
 
 import GoalsSVG from '../../assets/goals.svg'
 import { useAuth } from '../../hooks/auth'
+import { useState } from 'react'
+import { Alert } from 'react-native'
 
 // type Profile = {
 //   email: string;
@@ -17,16 +19,30 @@ import { useAuth } from '../../hooks/auth'
 
 export function Login() {
   const { navigate } = useNavigation()
-  const { loading, handleLogin } = useAuth()
-  
+  const { handleLogin } = useAuth()
+  const [loading, setLoading] = useState(false)
+
+  async function handleSignIn() {
+    setLoading(true)
+    try {
+      const response = await handleLogin()
+      if (response) {
+        navigate('Home')
+      }
+    } catch {
+      Alert.alert('Algo inesperado aconteceu')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <Container>
-      <GoalsSVG width={300} height={200}/>
+      <GoalsSVG width={300} height={200} />
       <Content>
-        <Title>Your goals</Title>
+        <Title>Your Goals</Title>
         <Subtitle>Set goals and achieve your dreams!</Subtitle>
-        <Button text='Login' loading={loading} onPress={handleLogin} />
-        {/* <Button text='Login' onPress={() => navigate('Home')} /> */}
+        <Button text='Login' loading={loading} onPress={handleSignIn} />
       </Content>
     </Container>
   )

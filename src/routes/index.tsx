@@ -1,19 +1,15 @@
 import { NavigationContainer } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
 
-import { Home } from '../pages/Home'
+import { useAuth } from '../hooks/auth'
 import { Login } from '../pages/Login'
+import { AppRoutes } from './app.routes'
 
 export function Routes() {
-  const { Navigator, Screen } = createStackNavigator()
+  const { uid } = useAuth()
+
   return (
     <NavigationContainer>
-      <Navigator screenOptions={{
-        headerShown: false
-      }}>
-        <Screen name='Login' component={Login} />
-        <Screen name='Home' component={Home} />
-      </Navigator>
+      {uid ? <AppRoutes /> : <Login />}
     </NavigationContainer>
   )
 }

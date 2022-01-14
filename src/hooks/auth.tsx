@@ -1,23 +1,25 @@
-import { createContext, ReactNode, useContext, useState } from 'react'
+import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from 'react'
+import axios from 'axios'
 import * as AuthSession from 'expo-auth-session'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { authUrl } from '../config/variables'
-import { Alert } from 'react-native'
-import axios from 'axios'
-import { createUser, getUserByEmail } from '../services/users'
+import { createUser, signIn } from '../services/users'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
 
 type User = {
-  id: string;
   email: string;
   name: string;
-  createdAt: Date
+  createdAt: object
 }
 
 type AuthContextData = {
   user: User;
-  setUser: any;
-  loading: boolean;
-  handleLogin: () => Promise<void>
+  loading: boolean,
+  uid: string,
+  setUser: Dispatch<SetStateAction<User>>,
+  setUid: Dispatch<SetStateAction<string>>,
+  handleLogin: () => Promise<any>,
 }
 
 type AuthProviderProps = {
@@ -35,32 +37,52 @@ const AuthContext = createContext({} as AuthContextData)
 
 function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>({} as User)
+  const [uid, setUid] = useState<string>('')
   const [loading, setLoading] = useState(false)
-  
+
   async function handleLogin() {
-    try {
-      setLoading(true)
-      const { type, params } = await AuthSession.startAsync({ authUrl }) as AuthResponse
-      
-      if (type === 'success') {
-        const { data } = await axios.get(`https://www.googleapis.com/oauth2/v2/userinfo?alt=json&access_token=${params.access_token}`)
-        
-        // const response = await createUser(data.email, data.name)
-        const response = await getUserByEmail(data.email)
+    const { type, params } = await AuthSession.startAsync({ authUrl }) as AuthResponse
 
-        
-        
+    if (type === 'success') {
+      const { data } = await axios.get(`https://www.googleapis.com/oauth2/v2/userinfo?alt=json&access_token=${params.access_token}`)
 
-        // navigate('Home')
+      try {
+        const userSigned = await signIn(data.id, data.email, setUser)
+
+        return userSigned
+      } catch {
+        const userCreated = await createUser(data.id, data.email, setUser)
+
+        return userCreated
       }
-      setLoading(false)
-    } catch {
-      Alert.alert('Algo inesperado aconteceu')
     }
   }
 
+  async function loadUser() {
+    setLoading(true)
+    const auth = getAuth()
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        setUid(user.uid)
+        const userLoaded = await AsyncStorage.getItem('@yg/user')
+        if(userLoaded) {
+          setUser(JSON.parse(userLoaded))
+        }
+      }
+    })
+
+    setLoading(false)
+  }
+
+
+
+  useEffect(() => {
+    loadUser()
+  }, [])
+
   return (
-    <AuthContext.Provider value={{ user, setUser, loading, handleLogin }}>
+    <AuthContext.Provider value={{ user, loading, uid, setUser, handleLogin, setUid }}>
       {children}
     </AuthContext.Provider>
   )

@@ -1,50 +1,34 @@
 import { useNavigation } from '@react-navigation/native'
-import { useEffect, useState } from 'react'
+// import { useEffect, useState } from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
-import { db } from '../../config/firebase'
-import { collection, getDocs, getDoc, doc, query, where } from 'firebase/firestore'
+// import { db } from '../../config/firebase'
+// import { collection, getDocs, getDoc, doc, query, where } from 'firebase/firestore'
 
 
 import { Container, Title } from './styles'
+import { useAuth } from '../../hooks/auth'
+import { Text } from 'react-native'
+import { signOutUser } from '../../services/users'
 
 export function Home() {
   const { goBack } = useNavigation()
+  const { user, setUser, setUid } = useAuth()
 
-  function backToLogin() {
-    goBack()
+  async function handleSignOut() {
+    await signOutUser(setUser, setUid)
+    // goBack()
   }
 
-  const usersCollectionRef = collection(db, 'Users')
-  const userRef = doc(db, 'Users', 'ipOKkl4TWRmJcgOfG23h')
 
-  // const [users, setUsers] = useState([])
-
-  useEffect(() => {
-    const getUsers = async () => {
-      // const user = await 
-
-      // const data = await getDocs(usersCollectionRef)
-      // const user = await getDocs(usersCollectionRef)
-      // const user = await getDoc(userRef)
-      const q = query(usersCollectionRef, where('email', '==', 'hello@world.com'))
-      const user = await getDocs(q)
-      const data = user.forEach((doc) => console.log(doc.data(), doc.id))
-      // console.log(data)
-      
-      // console.log(data.docs)
-      // setUsers(data.docs.map(doc => ({...doc.data(), id: doc.id})))
-      
-    }
-
-    getUsers()
-  }, [])
   return (
     <Container>
-      {/* {console.log('TESTING USER', users)} */}
-      <TouchableOpacity onPress={backToLogin}>
+      <TouchableOpacity onPress={handleSignOut}>
         <Title>Home</Title>
       </TouchableOpacity>
+
+      <Text>Hello</Text>
+      <Text>{user.email}</Text>
     </Container>
   )
 }

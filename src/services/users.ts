@@ -1,41 +1,54 @@
-import { addDoc, collection, getDocs, query, where } from 'firebase/firestore'
 import { db } from '../config/firebase'
+import { doc, getDoc, setDoc, Timestamp } from 'firebase/firestore'
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Alert } from 'react-native'
 
-// type ICreateUser = {
-//   name: string;
-//   email: string;
-// }
+// const usersCollectionRef = collection(db, 'Users')
+const auth = getAuth()
 
-const usersCollectionRef = collection(db, 'Users')
+async function createUser(id: string, email: string, setUser: any) {
+  try {
+    const response = await createUserWithEmailAndPassword(auth, email, id)
+    const newDoc = {
+      email: response.user.email,
+      name: response.user.displayName,
+      createdAt: Timestamp.fromDate(new Date())
+    }
+    await setDoc(doc(db, 'Users', response.user.uid), newDoc)
 
-// async function createUser({email, name}: ICreateUser) {
-async function createUser(email: string, name: string) {
-  const user = {
-    email,
-    name,
-    createdAt: new Date()
+    setUser(newDoc)
+    await AsyncStorage.setItem('@yg/user', JSON.stringify(newDoc))
+
+    return newDoc
+  } catch {
+    Alert.alert('Algo inesperado aconteceu')
   }
-  const response = await addDoc(usersCollectionRef, user)
-  // console.log(response.id)
-
-  return response
 }
 
-async function getUserByEmail(email: string) {
-  const q = query(usersCollectionRef, where('email', '==', email))
-  const user = await getDocs(q)
-  // user[0] 
-  console.log(user)
-  
-  // user.forEach((doc) => {const test = (doc.data(), doc.id)})
-  
+async function signIn(id: string, email: string, setUser: any) {
+  const response = await signInWithEmailAndPassword(auth, email, id)
+  const userRef = doc(db, 'Users', response.user.uid)
+  const userSnap = await getDoc(userRef)
+  const userId = userSnap.id
+  const data = userSnap.data()
+  const user = { ...data, id: userId}
 
+  setUser(user)
+  await AsyncStorage.setItem('@yg/user', JSON.stringify(user))
+
+  return user
 }
 
-// async function createUser(email, name, createdAt) {
+async function signOutUser(setUser: any, setUid: any) {
+  setUid('')
+  await signOut(auth)
+  await AsyncStorage.removeItem('@yg/user')
+  setUser({})
+}
 
-// }
 export {
   createUser,
-  getUserByEmail
+  signIn,
+  signOutUser,
 }
