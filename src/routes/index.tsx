@@ -1,11 +1,17 @@
 import { NavigationContainer } from '@react-navigation/native'
 
-import { useAuth } from '../hooks/auth'
+import { Loading } from '../pages/Loading/LoadingPage'
 import { Login } from '../pages/Login'
 import { AppRoutes } from './app.routes'
 
+import { useAuth } from '../hooks/auth'
+
 export function Routes() {
-  const { uid } = useAuth()
+  const { uid, loading } = useAuth()
+
+  if (loading) {
+    return <Loading />
+  }
 
   return (
     <NavigationContainer>

@@ -38,7 +38,7 @@ const AuthContext = createContext({} as AuthContextData)
 function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>({} as User)
   const [uid, setUid] = useState<string>('')
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   async function handleLogin() {
     const { type, params } = await AuthSession.startAsync({ authUrl }) as AuthResponse
@@ -70,9 +70,10 @@ function AuthProvider({ children }: AuthProviderProps) {
           setUser(JSON.parse(userLoaded))
         }
       }
+
+      setLoading(false)
     })
 
-    setLoading(false)
   }
 
 

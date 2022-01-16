@@ -1,6 +1,5 @@
 import { createStackNavigator } from '@react-navigation/stack'
-import { Home } from '../pages/Home'
-import { Login } from '../pages/Login'
+import { BottomTabs } from './bottomTabs'
 
 export function AppRoutes() {
   const { Navigator, Screen } = createStackNavigator()
@@ -8,8 +7,7 @@ export function AppRoutes() {
     <Navigator screenOptions={{
       headerShown: false
     }}>
-      {/* <Screen name='Login' component={Login} /> */}
-      <Screen name='Home' component={Home} />
+      <Screen name='BottomTab' component={BottomTabs} />
     </Navigator>
   )
 }
