@@ -46,22 +46,24 @@ function AuthProvider({ children }: AuthProviderProps) {
     if (type === 'success') {
       const { data } = await axios.get(`https://www.googleapis.com/oauth2/v2/userinfo?alt=json&access_token=${params.access_token}`)
 
+      setLoading(true)
       try {
         const userSigned = await signIn(data.id, data.email, setUser)
-
+        
         return userSigned
       } catch {
         const userCreated = await createUser(data.id, data.email, setUser)
-
+        
         return userCreated
+      } finally {
+        setLoading(false)
       }
     }
   }
 
   async function loadUser() {
-    setLoading(true)
     const auth = getAuth()
-
+    
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         setUid(user.uid)
