@@ -45,7 +45,10 @@ function AuthProvider({ children }: AuthProviderProps) {
 
     if (type === 'success') {
       const { data } = await axios.get(`https://www.googleapis.com/oauth2/v2/userinfo?alt=json&access_token=${params.access_token}`)
-
+      if (!data) {
+        return false
+      }
+      
       setLoading(true)
       try {
         const userSigned = await signIn(data.id, data.email, setUser)

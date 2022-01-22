@@ -13,7 +13,12 @@ export function Login() {
   async function handleSignIn() {
     setLoading(true)
     try {
-      await handleLogin()
+      const response = await handleLogin()
+
+      if (!response) {
+        setLoading(false)
+      }
+
     } catch {
       Alert.alert('Algo inesperado aconteceu')
     }

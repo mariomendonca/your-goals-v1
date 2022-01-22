@@ -1,7 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native'
 
-import { Loading } from '../pages/Loading/LoadingPage'
-import { Login } from '../pages/Login'
+import { Loading } from '../screens/Loading/LoadingPage'
+import { Login } from '../screens/Login'
 import { AppRoutes } from './app.routes'
 
 import { useAuth } from '../hooks/auth'

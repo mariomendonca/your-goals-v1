@@ -9,7 +9,7 @@ type Props = RectButtonProps & {
 
 export function Button({ text, loading, ...rest }: Props) {
   return (
-    <ButtonContainer {...rest}>
+    <ButtonContainer enabled={!loading} {...rest}>
       {loading ? <LoadingIndicator /> : <Text>{text}</Text>}
     </ButtonContainer>
   )

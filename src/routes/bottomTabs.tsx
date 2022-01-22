@@ -1,8 +1,9 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { Home } from '../pages/Home'
-import { Loading } from '../pages/Loading/LoadingPage'
+import { Home } from '../screens/Home'
+import { Loading } from '../screens/Loading/LoadingPage'
 import { Feather } from '@expo/vector-icons'
 import { colors } from '../styles/Colors'
+import { Profile } from '../screens/Profile'
 
 const { Navigator, Screen } = createBottomTabNavigator()
 
@@ -44,7 +45,7 @@ export function BottomTabs() {
       />
       <Screen 
         name='Profile' 
-        component={Home} 
+        component={Profile} 
         options={{
           tabBarIcon: ({ focused, color }) => {
             return <Feather name='user' size={24} color={color} size={25} />
