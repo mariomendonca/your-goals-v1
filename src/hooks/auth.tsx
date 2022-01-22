@@ -4,7 +4,7 @@ import * as AuthSession from 'expo-auth-session'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { authUrl } from '../config/variables'
-import { createUser, signIn } from '../services/users'
+import { createUser, signIn } from '../services/Users'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 
 type User = {
