@@ -30,7 +30,7 @@ export const GoalContainer = styled.View`
 `
 
 export const GoalTitle = styled.Text`
-  font-size: 20;
+  font-size: 20px;
   font-family: ${fonts.medium};
   color: ${colors.primary};
   margin-bottom: 10px;
