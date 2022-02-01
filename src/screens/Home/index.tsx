@@ -15,13 +15,14 @@ import {
 import { useAuth } from '../../hooks/auth'
 import { getGoals } from '../../services/Goals'
 import { colors } from '../../styles/Colors'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import { GoalItem } from '../../components/GoalItem'
 
 export function Home() {
   const { user, uid } = useAuth()
 
   const [goals, setGoals] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [isDone, setIsDone] = useState(false)
 
   async function handleGetGoals() {
     const response = await getGoals(uid)
@@ -33,6 +34,8 @@ export function Home() {
     handleGetGoals()
   }, [])
 
+  const date1 = new Date().setHours(0, 0, 0, 0)
+  const date = new Date(date1)
   return (
     <Container>
       <Content>
@@ -46,25 +49,15 @@ export function Home() {
               <GoalContainer>
                 <GoalTitle>{item.title}</GoalTitle>
                 {item.todos.map((item: any, index: number) => (
-                  <Todo key={index} onPress={() => setIsDone(!isDone)}>
-                    <Checkbox
-                      value={isDone}
-                      onValueChange={setIsDone}
-                      style={{ borderRadius: 6, height: 25, width: 25 }}
-                      color={isDone ? colors.primary : colors.darkGray}
-                    />
-                    <TodoText>{item}</TodoText>
-                  </Todo>
+                  <GoalItem key={index} item={item} />
                 ))}
-
               </GoalContainer>
             )}
           />
-
-
         ) : (
           <ActivityIndicator />
         )}
+
       </Content>
     </Container>
   )

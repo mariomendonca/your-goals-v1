@@ -6,7 +6,7 @@ export const Container = styled.View`
   flex: 1;
   background: ${colors.gray};
   padding: 0 20px;
-  `
+`
 
 export const Content = styled.SafeAreaView`
   flex: 1;
@@ -18,6 +18,11 @@ export const Title = styled.Text`
   font-family: ${fonts.medium};
   color: ${colors.primary};
   margin-bottom: 20px;
+`
+
+export const List = styled.FlatList`
+  width: 100%;
+  flex: 1;
 `
 
 export const GoalContainer = styled.View`
@@ -34,22 +39,4 @@ export const GoalTitle = styled.Text`
   font-family: ${fonts.medium};
   color: ${colors.primary};
   margin-bottom: 10px;
-`
-
-export const Todo = styled.TouchableOpacity`
-  flex-direction: row;
-  align-items: center;
-  margin-top: 10px;
-`
-
-export const TodoText = styled.Text`
-  font-family: ${fonts.regular};
-  font-size: 16px;
-  color: ${colors.primary};
-  margin-left: 5px;
-`
-
-export const List = styled.FlatList`
-  width: 100%;
-  flex: 1;
 `
